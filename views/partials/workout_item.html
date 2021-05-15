@@ -1,0 +1,68 @@
+{{ define "workout_item" }}
+<div class="sm:w-[300px] p-1">
+  <div class="workout-item">
+    <div class="flex flex-wrap gap-2">
+      <div class="grow">
+        <a
+          class="{{ IconFor .Type.String }}"
+          href="{{ RouteFor `workout-show` .ID }}"
+          >{{ .Name }}</a
+        >
+      </div>
+      <div class="text-right text-sm">
+        <a
+          class="{{ IconFor `user` }}"
+          href="{{ RouteFor `user-show` .User.ID }}"
+        >
+          {{ .User.Name }}</a
+        >
+      </div>
+    </div>
+    <div class="meta grid grid-cols-2 gap-4 text-sm mb-2">
+      <div>
+        <span title="{{ .Date | LocalDate }}">
+          {{ .Date | RelativeDate }}
+        </span>
+      </div>
+      <div class="text-right">
+        {{ template "snippet_location" .Data.Address }}
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <div
+        class="workout-tile-info {{ IconFor `distance` }} whitespace-nowrap font-mono"
+        title="Total distance"
+      >
+        {{ .Data.TotalDistance | HumanDistance }} {{
+        CurrentUser.PreferredUnits.Distance }}
+      </div>
+      <div
+        class="workout-tile-info {{ IconFor `duration` }} whitespace-nowrap font-mono"
+        title="Total duration"
+      >
+        {{ .Data.TotalDuration | HumanDuration }}
+      </div>
+      <div
+        class="workout-tile-info {{ IconFor `speed` }} whitespace-nowrap font-mono"
+        title="Average speed (no pause)"
+      >
+        {{ .Data.AverageSpeedNoPause | HumanSpeed }} {{
+        CurrentUser.PreferredUnits.Speed }}
+      </div>
+      <div
+        class="workout-tile-info {{ IconFor `tempo` }} whitespace-nowrap font-mono"
+        title="Average tempo (no pause)"
+      >
+        {{ .Data.AverageSpeedNoPause | HumanTempo }} {{
+        CurrentUser.PreferredUnits.Tempo }}
+      </div>
+      <div
+        class="workout-tile-info {{ IconFor `max-speed` }} whitespace-nowrap font-mono"
+        title="Max speed"
+      >
+        {{ .Data.MaxSpeed | HumanSpeed }} {{ CurrentUser.PreferredUnits.Speed }}
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}

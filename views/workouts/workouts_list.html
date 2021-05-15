@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+  <head>
+    {{ template "head" }}
+    <script src="{{ RouteFor `assets` }}/dist/sorttable.js"></script>
+  </head>
+  <body>
+    {{ template "header" . }}
+    <div class="content">
+      <div class="items-baseline flex flex-wrap">
+        <h2 class="grow justify-start {{ IconFor `workout` }}">
+          {{ i18n "Workouts" }} ({{ len .workouts }})
+        </h2>
+        <div class="justify-end mr-2">
+          <a
+            class="{{ IconFor `workout-add` }}"
+            href="{{ RouteFor `workout-add` }}"
+            ><span>{{ i18n "Add workout" }}</span></a
+          >
+        </div>
+      </div>
+
+      <table class="workout-info sortable">
+        <thead>
+          <tr>
+            <th></th>
+            <th>{{ i18n "Name" }}</th>
+            <th class="hidden sm:table-cell">{{ i18n "Date" }}</th>
+            <th class="hidden xl:table-cell">{{ i18n "Location" }}</th>
+            <th>{{ i18n "Distance" }}</th>
+            <th class="hidden sm:table-cell">{{ i18n "Duration" }}</th>
+            <th class="hidden 2xl:table-cell">{{ i18n "Avg speed" }}</th>
+            <th class="hidden 2xl:table-cell">{{ i18n "Avg tempo" }}</th>
+            <th class="hidden 2xl:table-cell">{{ i18n "Max speed" }}</th>
+            <th class="hidden lg:table-cell"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range .workouts }}
+          <tr>
+            <td class="text-center">
+              <div
+                class="{{ IconFor .Type.String }}"
+                title="{{ i18n .Type.String }}"
+              ></div>
+            </td>
+            <td>
+              <a href="{{ RouteFor `workout-show` .ID }}">{{ .Name }}</a>
+            </td>
+            <td class="hidden sm:table-cell" sorttable_customkey="{{ .Date }}">
+              {{ template "snippet_date" .Date }}
+            </td>
+            <td class="hidden xl:table-cell">
+              {{ template "snippet_location" .Data.Address }}
+            </td>
+            <td
+              sorttable_customkey="{{ .Data.TotalDistance }}"
+              class="whitespace-nowrap font-mono"
+            >
+              {{ .Data.TotalDistance | HumanDistance }} {{
+              CurrentUser.PreferredUnits.Distance }}
+            </td>
+            <td
+              class="hidden sm:table-cell whitespace-nowrap font-mono"
+              sorttable_customkey="{{ .Data.TotalDuration | NumericDuration }}"
+            >
+              {{ .Data.TotalDuration | HumanDuration }}
+            </td>
+            <td
+              class="hidden 2xl:table-cell whitespace-nowrap font-mono"
+              sorttable_customkey="{{ .Data.AverageSpeedNoPause }}"
+            >
+              {{ .Data.AverageSpeedNoPause | HumanSpeed }} {{
+              CurrentUser.PreferredUnits.Speed }}
+            </td>
+            <td
+              class="hidden 2xl:table-cell whitespace-nowrap font-mono"
+              sorttable_customkey="{{ .Data.AverageSpeedNoPause }}"
+            >
+              {{ .Data.AverageSpeedNoPause | HumanTempo }} {{
+              CurrentUser.PreferredUnits.Tempo }}
+            </td>
+            <td
+              class="hidden 2xl:table-cell whitespace-nowrap font-mono"
+              sorttable_customkey="{{ .Data.MaxSpeed }}"
+            >
+              {{ .Data.MaxSpeed | HumanSpeed }} {{
+              CurrentUser.PreferredUnits.Speed }}
+            </td>
+            <td class="hidden lg:table-cell">
+              <span class="actions"> {{ template "workout_actions" . }} </span>
+            </td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+
+    {{ template "footer" . }}
+  </body>
+</html>

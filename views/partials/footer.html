@@ -1,0 +1,24 @@
+{{ define "footer" }}
+<div class="footer">
+  <div>
+    Workout Tracker{{ with Version }},
+    <a
+      target="_blank"
+      title="Build time: {{ .BuildTime }}"
+      href="https://github.com/jovandeginste/workout-tracker/tree/{{ .RefName }}"
+    >
+      {{ if eq .RefType "branch" }}{{ .RefType }} {{ end }}{{ .RefName }} ({{
+      printf "%.8s" .Sha }})</a
+    >
+    {{ end }}
+  </div>
+  <div>
+    <a
+      class="icon-brands icon-baseline icon-space-sm icon-outside icon-github"
+      target="_blank"
+      href="https://github.com/jovandeginste/workout-tracker"
+      >GitHub</a
+    >
+  </div>
+</div>
+{{ end }}

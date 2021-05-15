@@ -1,0 +1,69 @@
+<html>
+  <head>
+    {{ template "head" }}
+  </head>
+  <body>
+    {{ template "header" . }}
+    <div class="content">
+      <div class="inner-form">
+        <h2 class="{{ IconFor `workout-add` }}">{{ i18n "Add a workout" }}</h2>
+        <form
+          method="post"
+          action="{{ RouteFor `workouts-create` }}"
+          enctype="multipart/form-data"
+        >
+          <table class="sm:table-fixed">
+            <tbody>
+              <tr>
+                <td><label for="file">{{ i18n "File" }}</label></td>
+                <td>
+                  <input
+                    type="file"
+                    id="file"
+                    name="file"
+                    accept=".gpx, .fit, .tcx"
+                    multiple
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label for="type">{{ i18n "Type" }}</label>
+                </td>
+                <td>
+                  <select id="type" name="type">
+                    <option value="auto">{{ i18n "Auto-detect" }}</option>
+                    {{ range workoutTypes }}
+                    <option value="{{ .String }}">{{ i18n .String }}</option>
+                    {{ end }}
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label for="notes">{{ i18n "Notes" }}</label>
+                </td>
+                <td>
+                  <textarea
+                    type="text"
+                    id="notes"
+                    name="notes"
+                    rows="10"
+                  ></textarea>
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>
+                  <button type="submit">{{ i18n "Add workouts" }}</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </div>
+    </div>
+
+    {{ template "footer" . }}
+  </body>
+</html>

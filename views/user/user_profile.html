@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+  <head>
+    {{ template "head" }}
+  </head>
+  <body>
+    {{ template "header" . }}
+    <div class="content">
+      <div class="inner-form">
+        <h2 class="{{ IconFor `user-profile` }}">{{ i18n "Your profile" }}</h2>
+        {{ with CurrentUser }}
+        <form method="post" action="{{ RouteFor `user-profile-update` }}">
+          <table class="table-fixed">
+            <tbody>
+              <tr>
+                <th>
+                  <label for="api_active"
+                    >{{ i18n "Enable API access" }}
+
+                    <a
+                      class="{{ IconFor `info` }}"
+                      title="{{ i18n `how to use` }}"
+                      target="_blank"
+                      href="https://github.com/jovandeginste/workout-tracker?tab=readme-ov-file#api-usage"
+                      >&nbsp;</a
+                    >
+                  </label>
+                </th>
+                <td class="flex flex-wrap gap-5">
+                  <input
+                    type="checkbox"
+                    id="api_active"
+                    name="api_active"
+                    value="true"
+                    {{
+                    BoolToCheckbox
+                    .Profile.APIActive
+                    }}
+                  />
+                  {{ if .Profile.APIActive }}
+                  <input
+                    type="password"
+                    id="api_key"
+                    name="api_key"
+                    size="40"
+                    value="{{ .APIKey }}"
+                    readonly
+                  />
+
+                  <form
+                    class="flex flex-wrap items-center"
+                    method="post"
+                    action="{{ RouteFor `user-profile-reset-api-key` }}"
+                  >
+                    <button
+                      class="{{ IconFor `show` }}"
+                      title="{{ i18n `show/hide` }}"
+                      onclick="toggleTextPassword(this, 'api_key'); return false;"
+                    />
+                    <button
+                      class="{{ IconFor `copy` }}"
+                      title="{{ i18n `copy to clipboard` }}"
+                      onclick="copyToClipboard('api_key'); return false;"
+                    />
+                    <button
+                      class="{{ IconFor `refresh` }}"
+                      title="{{ i18n `generate a new API key` }}"
+                    />
+                  </form>
+                  {{ end }}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <label for="totals_show"
+                    >{{ i18n "Totals to show on dashboard" }}</label
+                  >
+                </th>
+                <td>
+                  {{ template "user_profile_totals_show" .Profile.TotalsShow }}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <label for="timezone">{{ i18n "Time zone" }}</label>
+                </th>
+                <td>{{ template "user_profile_timezone" }}</td>
+              </tr>
+              <tr>
+                <th>
+                  <label for="language">{{ i18n "Language" }}</label>
+                </th>
+                <td>
+                  {{ template "user_profile_language" .Profile.Language }}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <label for="auto_import_directory"
+                    >{{ i18n "Auto import directory" }}</label
+                  >
+                </th>
+                <td>
+                  <input
+                    type="text"
+                    id="auto_import_directory"
+                    name="auto_import_directory"
+                    size="40"
+                    value="{{ .Profile.AutoImportDirectory }}"
+                    placeholder="/imports/{{ .Username }}/"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <label for="prefer_full_date"
+                    >{{ i18n "Show full date by default" }}</label
+                  >
+                </th>
+                <td>
+                  <input
+                    type="checkbox"
+                    id="prefer_full_date"
+                    name="prefer_full_date"
+                    value="true"
+                    {{
+                    BoolToCheckbox
+                    .Profile.PreferFullDate
+                    }}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <label for="socials_disabled"
+                    >{{ i18n "Disable social sharing buttons" }}</label
+                  >
+                </th>
+                <td>
+                  <input
+                    type="checkbox"
+                    id="socials_disabled"
+                    name="socials_disabled"
+                    value="true"
+                    {{
+                    BoolToCheckbox
+                    .Profile.SocialsDisabled
+                    }}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>
+                  <button type="submit">{{ i18n "Update profile" }}</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+        {{ end }}
+      </div>
+      <div class="inner-form">
+        <h2 class="{{ IconFor `units` }}">{{ i18n "Preferred units" }}</h2>
+        {{ template "user_profile_preferred_units" }}
+      </div>
+      <div class="inner-form">
+        <h2 class="{{ IconFor `actions` }}">{{ i18n "Actions" }}</h2>
+        <form method="post" action="{{ RouteFor `user-refresh` }}">
+          <label for="refresh">{{ i18n "Refresh all your workouts" }}</label>
+          <button type="submit">
+            <a class="{{ IconFor `refresh` }}"></a>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    {{ template "footer" . }}
+  </body>
+</html>
